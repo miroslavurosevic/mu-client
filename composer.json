@@ -1,0 +1,11 @@
+{
+	"autoload" : {
+		"psr-4" : {
+			"Mu\\Lamia-client-mu\\" : "src"
+		}
+	},
+	"name" : "mu/lamia-client-mu",
+	"require" : {
+		"php" : ">=7.4"
+	}
+}
