@@ -1,10 +1,13 @@
+<?php require 'authentication.php';?>
 <html>
 	<head>
 		<title>Lamia Task Client</title>
 	</head>
 
 	<body>
-	<div>
+		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
+			<input type="submit" name="logout" value="Log out">
+		</form>
 		<h2>Get movie</h2>
 		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
 			<label for="title">Title</label>
@@ -27,25 +30,31 @@
 		</form>
 		
 		<?php 
-		if($_SERVER["REQUEST_METHOD"]=="POST"){
-		    if(isset($_POST['getMovie'])){
-		        echo '<h1>Movie info: '.$_POST['title'].'</h1>';
-		        $query = http_build_query(array('title'=>$_POST['title'],'year'=>$_POST['year'],'plotType'=>$_POST['plotType']));
-		        $ch = curl_init("mu-rest-server.herokuapp.com/getMovie?".$query);
-		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		        $response = curl_exec($ch);
-		        curl_close($ch);
-		        echo $response;
-		    } elseif (isset($_POST['getBook'])){
-		        echo '<h1>Book info: '.$_POST['title'].'</h1>';
-		        $ch = curl_init("mu-rest-server.herokuapp.com/getBook?isbn=".$_POST['isbn']);
-		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		        $response = curl_exec($ch);
-		        curl_close($ch);
-		        echo $response;
-		    }	        
-		}
-		?>
+    		const REST_SERVER = "localhost:8080";
+    		//const REST_SERVER="mu-rest-server.herokuapp.com";
+    		if($_SERVER["REQUEST_METHOD"]=="POST"){
+    		    if(isset($_POST['getMovie'])){
+    		        echo '<h1>Movie info: '.$_POST['title'].'</h1>';
+    		        $query = http_build_query(array('title'=>$_POST['title'],'year'=>$_POST['year'],'plotType'=>$_POST['plotType']));
+    		        $ch = curl_init(REST_SERVER."/getMovie?".$query);
+    		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    		        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: Bearer".$_COOKIE['token']));
+    		        $response = curl_exec($ch);
+    		        curl_close($ch);
+    		        echo $response;
+    		    } elseif (isset($_POST['getBook'])){
+    		        echo '<h1>Book info: </h1>';
+    		        $ch = curl_init(REST_SERVER."/getBook?isbn=".$_POST['isbn']);
+    		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    		        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: Bearer".$_COOKIE['token']));
+    		        $response = curl_exec($ch);
+    		        curl_close($ch);
+    		        echo $response;
+    		    } elseif (isset($_POST['logout'])){
+    		        setcookie("token","",time()-3600);
+    		    }
+    		  }
+          ?>
 	</body>
 
 </html>

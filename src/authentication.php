@@ -1,0 +1,45 @@
+<?php 
+    const COOKIE_NAME = "token";
+    
+    if(isset($_COOKIE[COOKIE_NAME])){     
+        return;
+    }elseif ($_SERVER["REQUEST_METHOD"]=="POST"){  
+        if(isset($_POST['login'])){          
+            $credentials = array("username" => $_POST["username"], "password" => $_POST["password"]);
+            $ch = curl_init("localhost:8080/login");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($credentials));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            $response = curl_exec($ch);
+            $responseCode = curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
+            curl_close($ch);
+            
+            if($responseCode=="200"){            
+                $matches = array();
+                preg_match("/(?<=Authorization: Bearer)(.*?)(?=\s)/",$response,$matches);
+                setcookie('token',$matches[0]);
+                header("Location: index.php");
+            } else {
+                echo "Login failed, please try again or sign up";
+            }      
+        } elseif(isset($_POST['signup'])){        
+            $credentials = array("username" => $_POST["username"], "password" => $_POST["password"]);
+            $ch = curl_init("localhost:8080/users/signup");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($credentials));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, TRUE);
+            $response = curl_exec($ch);
+            $responseCode = curl_getinfo($ch,CURLINFO_RESPONSE_CODE);
+            curl_close($ch);
+            if($responseCode=="200"){
+                echo "Your account is created, please log in.";
+            } else {
+                echo "Sign up failed, please try again";
+            }
+        } 
+    } else {
+        header("Location: login.php");
+    }
+?>
