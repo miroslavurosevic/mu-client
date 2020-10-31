@@ -1,0 +1,1 @@
+<img src=<?php echo $imgUrl?>  class="image" align="left"/>

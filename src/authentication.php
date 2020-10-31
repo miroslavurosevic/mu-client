@@ -1,12 +1,11 @@
 <?php 
-    const COOKIE_NAME = "token";
+    define("COOKIE_NAME", "token");
+    define("REST_SERVER", "mu-rest-server.herokuapp.com");
     
-    if(isset($_COOKIE[COOKIE_NAME])){     
-        return;
-    }elseif ($_SERVER["REQUEST_METHOD"]=="POST"){  
+    if ($_SERVER["REQUEST_METHOD"]=="POST"){  
         if(isset($_POST['login'])){          
             $credentials = array("username" => $_POST["username"], "password" => $_POST["password"]);
-            $ch = curl_init("localhost:8080/login");
+            $ch = curl_init(REST_SERVER."/login");
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($credentials));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -25,7 +24,7 @@
             }      
         } elseif(isset($_POST['signup'])){        
             $credentials = array("username" => $_POST["username"], "password" => $_POST["password"]);
-            $ch = curl_init("localhost:8080/users/signup");
+            $ch = curl_init(REST_SERVER."/users/signup");
             curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($credentials));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -39,7 +38,5 @@
                 echo "Sign up failed, please try again";
             }
         } 
-    } else {
-        header("Location: login.php");
     }
 ?>

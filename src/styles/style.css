@@ -1,0 +1,53 @@
+.query_container{
+	background-color: lightblue;
+	margin-bottom: 5px;
+}
+
+.query {
+	display: inline-block;
+	margin-right: 5px;
+	padding: 5px;
+}
+
+.query_label {
+	display: block;
+	margin-bottom: 3px;
+	font-size: large;
+}
+
+.logout {
+	display: inline-block;
+	margin-left: 50px;
+
+}
+
+.logout_button {
+
+}
+
+.data_label{
+	font-weight: bold;
+}
+
+.image {
+	height: 500px;
+}
+
+.login {
+	width:200px;
+	height:100px;
+	padding: 10%;
+	margin-left: calc(40% - 100px);
+	margin-top: 10vh;
+	background-color: lightblue;
+}
+
+.login_input{
+	width: 100%;
+	display: block;
+	margin: 3px;
+}
+
+.login_button{
+	margin: 3px;
+}
