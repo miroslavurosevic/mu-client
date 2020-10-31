@@ -37,7 +37,7 @@
     			<input class="logout_button" type="submit" name="logout" value="Log out">
     		</form>
     	</div>
-		<?php include 'getData.php' ?>
+		<?php include 'getData.php'?>
 	</body>
 
 </html>
