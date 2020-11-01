@@ -18,7 +18,9 @@
                 $matches = array();
                 //Finds JWT from the response using regex and returns it as first element of $matches
                 preg_match("/(?<=Authorization: Bearer)(.*?)(?=\s)/",$response,$matches);
-                setcookie('token',$matches[0]);
+                /*Cookie expiration time is time() + validity interval in seconds.
+                  It must be the same as JWT expiration time set on the server.*/
+                setcookie('token',$matches[0],time()+86400);
                 header("Location: index.php");
             } else {
                 echo "Login failed, please try again or sign up";
